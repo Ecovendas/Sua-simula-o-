@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simule em 1 Minuto | Energia Solar</title>
+<meta name="description" content="Descubra em 1 minuto quanto você pode economizar com energia solar. Simulação grátis.">
+<meta property="og:title" content="Simule em 1 Minuto">
+<meta property="og:description" content="Descubra quanto você pode economizar com energia solar — simulação grátis e rápida.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #15221B;
+    --ink-soft: #1B2B21;
+    --amber: #E3A73E;
+    --rust: #A8472B;
+    --green: #4F8F68;
+    --paper: #F3EEE3;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:#0D1712;
+    font-family:'Poppins', sans-serif;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px 16px;
+  }
+  .card {
+    width:100%;
+    max-width:420px;
+    background:var(--ink);
+    color:var(--paper);
+    border-radius:18px;
+    overflow:hidden;
+  }
+  .header {
+    padding:24px 24px 16px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+  }
+  .header-title { font-size:20px; font-weight:700; }
+  .icon-sun { width:26px; height:26px; color:var(--amber); flex-shrink:0; }
+  .tabs {
+    padding:0 24px;
+    display:flex;
+    gap:24px;
+    border-bottom:1px solid rgba(243,238,227,0.12);
+  }
+  .tab {
+    padding-bottom:12px;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.3px;
+    color:rgba(243,238,227,0.4);
+    border-bottom:2px solid transparent;
+  }
+  .tab.active-amber { color:var(--amber); border-bottom-color:var(--amber); }
+  .tab.active-green { color:var(--green); border-bottom-color:var(--green); }
+  .content { padding:24px; }
+  form, #resumo { display:flex; flex-direction:column; gap:16px; }
+  .field label {
+    display:block; font-size:12px; font-weight:500; margin-bottom:6px;
+    color:rgba(243,238,227,0.65);
+  }
+  .field input, .field select {
+    width:100%; padding:12px 16px; border-radius:8px; font-size:14px; font-family:inherit;
+    background:rgba(243,238,227,0.06); border:1px solid rgba(243,238,227,0.18);
+    color:var(--paper); outline:none;
+  }
+  .field select option { color:#000; }
+  .field-divider { border-top:1px solid rgba(243,238,227,0.12); padding-top:16px; }
+  .erro { font-size:13px; font-weight:500; color:var(--rust); }
+  .btn-primary {
+    width:100%; padding:14px; border-radius:8px; font-size:14px; font-weight:700; letter-spacing:0.5px;
+    background:var(--amber); color:var(--ink); border:none; cursor:pointer; margin-top:4px;
+  }
+  .btn-whatsapp {
+    width:100%; padding:14px; border-radius:8px; font-size:14px; font-weight:700; letter-spacing:0.5px;
+    background:var(--green); color:var(--ink); text-decoration:none;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn-secondary {
+    width:100%; padding:12px; border-radius:8px; font-size:14px; font-weight:500;
+    background:transparent; border:1px solid rgba(243,238,227,0.25); color:var(--paper); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:8px; font-family:inherit;
+  }
+  .btn-whatsapp svg, .btn-secondary svg { width:18px; height:18px; flex-shrink:0; }
+  .hero-label { font-size:12px; font-weight:600; letter-spacing:0.4px; color:rgba(243,238,227,0.6); }
+  .hero-value { font-size:34px; font-weight:700; color:var(--green); margin-top:4px; }
+  .hero-sub { font-size:14px; color:rgba(243,238,227,0.65); margin-top:2px; }
+  .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .stat-card { background:var(--ink-soft); border-radius:8px; padding:16px; }
+  .stat-card.full { grid-column:span 2; }
+  .stat-card svg { width:18px; height:18px; color:var(--amber); }
+  .stat-label { font-size:12px; color:rgba(243,238,227,0.6); margin-top:8px; }
+  .stat-value { font-size:17px; font-weight:700; margin-top:2px; }
+  .stat-sub { font-size:11px; color:rgba(243,238,227,0.5); margin-top:2px; }
+  .disclaimer { font-size:11px; color:rgba(243,238,227,0.45); line-height:1.5; }
+  #resumo { display:none; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <div class="header-title">Simule em 1 Minuto</div>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active-amber" id="tab-form">SIMULAÇÃO</div>
+      <div class="tab" id="tab-resumo">RESUMO</div>
+    </div>
+
+    <div class="content">
+      <form id="form-simulacao">
+        <div class="field">
+          <label for="cep">CEP (opcional)</label>
+          <input type="text" id="cep" placeholder="00000-000">
+        </div>
+        <div class="field">
+          <label for="uf">Estado</label>
+          <select id="uf"></select>
+        </div>
+        <div class="field">
+          <label for="valorConta">Valor da conta de luz</label>
+          <input type="text" inputmode="decimal" id="valorConta" placeholder="R$ 0,00">
+        </div>
+        <div class="field">
+          <label for="concessionaria">Concessionária</label>
+          <select id="concessionaria"></select>
+        </div>
+        <div class="field field-divider">
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" placeholder="Seu nome">
+        </div>
+        <div class="field">
+          <label for="whatsapp">WhatsApp</label>
+          <input type="text" inputmode="tel" id="whatsapp" placeholder="(62) 90000-0000">
+        </div>
+        <div class="erro" id="erro" style="display:none;"></div>
+        <button type="submit" class="btn-primary">SIMULAR ECONOMIA</button>
+      </form>
+
+      <div id="resumo">
+        <div>
+          <div class="hero-label">ECONOMIA ANUAL ESTIMADA</div>
+          <div class="hero-value" id="economia-anual">R$ 0</div>
+          <div class="hero-sub" id="economia-mensal">R$ 0 por mês</div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <div class="stat-label">Potência do kit</div>
+            <div class="stat-value" id="potencia-kit">0 kWp</div>
+            <div class="stat-sub" id="num-modulos">0 módulos</div>
+          </div>
+          <div class="stat-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="1"/><line x1="6" y1="8" x2="6" y2="11"/><line x1="10" y1="8" x2="10" y2="11"/><line x1="14" y1="8" x2="14" y2="11"/><line x1="18" y1="8" x2="18" y2="11"/></svg>
+            <div class="stat-label">Área necessária</div>
+            <div class="stat-value" id="area-necessaria">0 m²</div>
+          </div>
+          <div class="stat-card full">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <div class="stat-label">Payback estimado</div>
+            <div class="stat-value" id="payback">0 meses</div>
+          </div>
+        </div>
+
+        <div class="disclaimer">*Valores aproximados, calculados a partir de médias de mercado e irradiação solar da região. Não configura orçamento ou oferta comercial.</div>
+
+        <a href="#" target="_blank" rel="noopener noreferrer" class="btn-whatsapp" id="btn-whatsapp">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          FALAR COM A BRENDA NO WHATSAPP
+        </a>
+
+        <button class="btn-secondary" id="btn-refazer" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          Refazer simulação
+        </button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  var NUMERO_WHATSAPP = '5562992063596';
+
+  var HSP_POR_UF = { AC:4.8, AL:5.5, AP:4.9, AM:4.7, BA:5.5, CE:5.6, DF:5.4, ES:5.1, GO:5.4, MA:5.2, MT:5.2, MS:5.3, MG:5.3, PA:4.9, PB:5.5, PR:4.6, PE:5.5, PI:5.6, RJ:4.9, RN:5.6, RS:4.7, RO:4.9, RR:5.0, SC:4.4, SP:4.9, SE:5.4, TO:5.3 };
+
+  var UF_LIST = [
+    ['GO','Goiás'],['DF','Distrito Federal'],['SP','São Paulo'],['RJ','Rio de Janeiro'],
+    ['MG','Minas Gerais'],['PR','Paraná'],['SC','Santa Catarina'],['RS','Rio Grande do Sul'],
+    ['BA','Bahia'],['PE','Pernambuco'],['CE','Ceará'],['PA','Pará'],['MA','Maranhão'],
+    ['MT','Mato Grosso'],['MS','Mato Grosso do Sul'],['ES','Espírito Santo'],
+    ['AC','Acre'],['AL','Alagoas'],['AP','Amapá'],['AM','Amazonas'],['PB','Paraíba'],
+    ['PI','Piauí'],['RN','Rio Grande do Norte'],['RO','Rondônia'],['RR','Roraima'],
+    ['SE','Sergipe'],['TO','Tocantins']
+  ];
+
+  var CONCESSIONARIAS = [
+    {nome:'Equatorial Goiás', tarifa:0.83}, {nome:'Enel São Paulo', tarifa:0.85},
+    {nome:'CPFL Paulista', tarifa:0.78}, {nome:'Light (RJ)', tarifa:0.95},
+    {nome:'Enel Rio', tarifa:0.90}, {nome:'Cemig (MG)', tarifa:0.88},
+    {nome:'Copel (PR)', tarifa:0.75}, {nome:'Celesc (SC)', tarifa:0.72},
+    {nome:'Neoenergia Coelba (BA)', tarifa:0.82}, {nome:'Neoenergia Celpe (PE)', tarifa:0.85},
+    {nome:'Equatorial Pará', tarifa:0.80}, {nome:'Equatorial Maranhão', tarifa:0.83},
+    {nome:'Energisa Mato Grosso', tarifa:0.86}, {nome:'Energisa Mato Grosso do Sul', tarifa:0.84},
+    {nome:'Enel Ceará', tarifa:0.79}, {nome:'EDP Espírito Santo', tarifa:0.87},
+    {nome:'Outra / não sei', tarifa:0.85}
+  ];
+
+  var POTENCIA_MODULO_KWP = 0.555;
+  var AREA_POR_MODULO_M2 = 3.3;
+  var PERFORMANCE_RATIO = 0.78;
+  var FATOR_ECONOMIA = 0.90;
+
+  function custoPorKwp(p) {
+    if (p < 5) return 4300;
+    if (p < 10) return 3900;
+    return 3600;
+  }
+
+  function calcular(valorConta, uf, concessionaria) {
+    var tarifaObj = CONCESSIONARIAS.filter(function(c){ return c.nome === concessionaria; })[0];
+    var tarifa = tarifaObj ? tarifaObj.tarifa : 0.85;
+    var hsp = HSP_POR_UF[uf] || 5.0;
+    var consumoMensalKwh = valorConta / tarifa;
+    var potenciaNecessariaKwp = consumoMensalKwh / (hsp * 30 * PERFORMANCE_RATIO);
+    var numModulos = Math.max(1, Math.ceil(potenciaNecessariaKwp / POTENCIA_MODULO_KWP));
+    var potenciaKitKwp = numModulos * POTENCIA_MODULO_KWP;
+    var areaNecessaria = numModulos * AREA_POR_MODULO_M2;
+    var economiaMensal = valorConta * FATOR_ECONOMIA;
+    var economiaAnual = economiaMensal * 12;
+    var custoEstimado = potenciaKitKwp * custoPorKwp(potenciaKitKwp);
+    var paybackMeses = Math.round(custoEstimado / economiaMensal);
+    return { numModulos:numModulos, potenciaKitKwp:potenciaKitKwp, areaNecessaria:areaNecessaria, economiaMensal:economiaMensal, economiaAnual:economiaAnual, paybackMeses:paybackMeses };
+  }
+
+  function fmtBRL(n) { return n.toLocaleString('pt-BR', { style:'currency', currency:'BRL', maximumFractionDigits:0 }); }
+  function fmtNum(n, dec) { return n.toLocaleString('pt-BR', { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
+
+  var ufSelect = document.getElementById('uf');
+  UF_LIST.forEach(function(item) {
+    var opt = document.createElement('option');
+    opt.value = item[0]; opt.textContent = item[0] + ' — ' + item[1];
+    if (item[0] === 'GO') opt.selected = true;
+    ufSelect.appendChild(opt);
+  });
+
+  var concSelect = document.getElementById('concessionaria');
+  CONCESSIONARIAS.forEach(function(c) {
+    var opt = document.createElement('option');
+    opt.value = c.nome; opt.textContent = c.nome;
+    if (c.nome === 'Equatorial Goiás') opt.selected = true;
+    concSelect.appendChild(opt);
+  });
+
+  var resultadoAtual = null;
+
+  document.getElementById('form-simulacao').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var cep = document.getElementById('cep').value;
+    var uf = document.getElementById('uf').value;
+    var valorContaStr = document.getElementById('valorConta').value;
+    var concessionaria = document.getElementById('concessionaria').value;
+    var nome = document.getElementById('nome').value;
+    var whatsapp = document.getElementById('whatsapp').value;
+    var erroEl = document.getElementById('erro');
+
+    var valorLimpo = valorContaStr.replace(/\./g, '').replace(',', '.');
+    var valor = parseFloat(valorLimpo);
+
+    if (!nome.trim()) { erroEl.textContent = 'Digite seu nome.'; erroEl.style.display = 'block'; return; }
+    if (whatsapp.replace(/\D/g, '').length < 10) { erroEl.textContent = 'Digite um WhatsApp válido com DDD.'; erroEl.style.display = 'block'; return; }
+    if (!valor || valor <= 0) { erroEl.textContent = 'Digite o valor da sua conta de luz.'; erroEl.style.display = 'block'; return; }
+    erroEl.style.display = 'none';
+
+    resultadoAtual = calcular(valor, uf, concessionaria);
+
+    document.getElementById('economia-anual').textContent = fmtBRL(resultadoAtual.economiaAnual);
+    document.getElementById('economia-mensal').textContent = fmtBRL(resultadoAtual.economiaMensal) + ' por mês';
+    document.getElementById('potencia-kit').textContent = fmtNum(resultadoAtual.potenciaKitKwp, 2) + ' kWp';
+    document.getElementById('num-modulos').textContent = resultadoAtual.numModulos + ' módulos de 555W';
+    document.getElementById('area-necessaria').textContent = fmtNum(resultadoAtual.areaNecessaria, 0) + ' m²';
+    document.getElementById('payback').textContent = resultadoAtual.paybackMeses + ' meses';
+
+    var linhaCep = cep.trim() ? ('\nCEP: ' + cep) : '';
+    var msg = 'Oi! Fiz uma simulação de energia solar e quero saber mais 🌞\n\n' +
+      'Nome: ' + nome + '\n' +
+      'WhatsApp: ' + whatsapp + '\n' +
+      'Conta de luz: R$ ' + valorContaStr + '\n' +
+      'Estado: ' + uf + linhaCep + '\n' +
+      'Economia estimada: ' + fmtBRL(resultadoAtual.economiaAnual) + '/ano\n' +
+      'Payback estimado: ' + resultadoAtual.paybackMeses + ' meses';
+    document.getElementById('btn-whatsapp').href = 'https://wa.me/' + NUMERO_WHATSAPP + '?text=' + encodeURIComponent(msg);
+
+    document.getElementById('form-simulacao').style.display = 'none';
+    document.getElementById('resumo').style.display = 'flex';
+    document.getElementById('tab-form').classList.remove('active-amber');
+    document.getElementById('tab-resumo').classList.add('active-green');
+  });
+
+  document.getElementById('btn-refazer').addEventListener('click', function() {
+    document.getElementById('resumo').style.display = 'none';
+    document.getElementById('form-simulacao').style.display = 'flex';
+    document.getElementById('tab-resumo').classList.remove('active-green');
+    document.getElementById('tab-form').classList.add('active-amber');
+  });
+</script>
+</body>
+</html>
